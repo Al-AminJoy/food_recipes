@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:recepie_app/category.dart';
+import 'package:recepie_app/category_model.dart';
+import 'package:recepie_app/network_repository.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,12 +15,37 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var _textController = TextEditingController();
 
+  List<Category> _categories = [];
+
+  NetworkRepository repository = new NetworkRepository();
+
   String searchItem = "";
 
   void changeText(String text) {
     setState(() {
       searchItem = text;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    findCategoryModel();
+
+  }
+
+  findCategoryModel(){
+
+    repository.getCategories().then((value) {
+      setState(() {
+        if(value != null){
+          _categories = value.categories;
+        }
+      });
+    });
+
+
   }
 
   @override
@@ -79,70 +107,75 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
+            Text('Categories',style: TextStyle(fontSize: 20,color: Colors.orange,fontWeight: FontWeight.bold),),
+            const SizedBox(
+              height: 10,
+            ),
             Expanded(
                 child: GridView.builder(
-                    itemCount: 10,
+                    itemCount: _categories.length,
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 3/2.61,
                       mainAxisSpacing: 12
                     ),
                     itemBuilder: (context, index) {
-                      return Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.only(top: 10),
-                          child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              color: Colors.white,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      SizedBox(
-                                          height: 150,
-                                          width: double.infinity,
-                                          child: Image(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                                'https://cdn.pixabay.com/photo/2017/03/23/19/57/asparagus-2169305_960_720.jpg'),
-                                          )),
-                                      Positioned(
-                                        child: SizedBox(
-                                          child: Container(
-                                            height: 40,
-                                            width: double.infinity,
-                                            color: Colors.black.withOpacity(.5),
-                                          ),
-                                        ),
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                      ),
-                                      Positioned(
+                      return Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          color: Colors.white,
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    SizedBox(
+                                        height: 150,
+                                        width: double.infinity,
+                                        child: Image(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(
+                                              '${_categories[index].strCategoryThumb}'),
+                                        )),
+                                    Positioned(
+                                      bottom: -3,
+                                      left: 0,
+                                      right: 0,
+                                      child: SizedBox(
                                         child: Container(
-                                          padding: EdgeInsets.all(10),
-
-                                          child: Text(
-                                            'Dessart',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white),
+                                          height: 40,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                              color: Colors.black.withOpacity(.3),
+                                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))
                                           ),
                                         ),
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )));
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+
+                                        child: Text(
+                                          '${_categories[index].strCategory}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
                     }))
           ],
         ),
