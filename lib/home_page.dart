@@ -50,6 +50,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
           title: const Text(
@@ -129,50 +133,54 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    SizedBox(
-                                        height: 150,
-                                        width: double.infinity,
-                                        child: Image(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(
-                                              '${_categories[index].strCategoryThumb}'),
-                                        )),
-                                    Positioned(
-                                      bottom: -3,
-                                      left: 0,
-                                      right: 0,
-                                      child: SizedBox(
-                                        child: Container(
-                                          height: 40,
+                                LayoutBuilder(builder: (context,constraint){
+                                  return Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      SizedBox(
+                                          height: 150,
                                           width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              color: Colors.black.withOpacity(.3),
-                                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))
+                                          child: Image(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(
+                                                '${_categories[index].strCategoryThumb}'),
+                                          )),
+                                      Positioned(
+                                        bottom: -(constraint.maxHeight /
+                                            .2),
+                                        left: 0,
+                                        right: 0,
+                                        child: SizedBox(
+                                          child: Container(
+                                            height: 40,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                color: Colors.black.withOpacity(.3),
+                                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
+                                      Positioned(
+                                        bottom: height* -.003,
+                                        left: 0,
+                                        right: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
 
-                                        child: Text(
-                                          '${_categories[index].strCategory}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,fontWeight: FontWeight.bold),
+                                          child: Text(
+                                            '${_categories[index].strCategory}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                      )
+                                    ],
+                                  );
+                                }),
+
                               ],
                             ),
                           );
