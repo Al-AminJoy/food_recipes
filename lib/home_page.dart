@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:recepie_app/category.dart';
-import 'package:recepie_app/category_model.dart';
+import 'package:recepie_app/data/category.dart';
+import 'package:recepie_app/data/category_model.dart';
 import 'package:recepie_app/network_repository.dart';
+import 'package:recepie_app/recipes_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,29 +31,24 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     findCategoryModel();
-
   }
 
-  findCategoryModel(){
-
+  findCategoryModel() {
     repository.getCategories().then((value) {
       setState(() {
-        if(value != null){
+        if (value != null) {
           _categories = value.categories;
         }
       });
     });
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    Orientation orientaion = MediaQuery.of(context).orientation;
 
     return Scaffold(
       appBar: AppBar(
@@ -111,79 +107,92 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            Text('Categories',style: TextStyle(fontSize: 20,color: Colors.orange,fontWeight: FontWeight.bold),),
+            const Text(
+              'Categories',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold),
+            ),
             const SizedBox(
               height: 10,
             ),
             Expanded(
                 child: GridView.builder(
                     itemCount: _categories.length,
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3/2.61,
-                      mainAxisSpacing: 12
-                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (orientaion == Orientation.portrait) ? 2 : 3,
+                            childAspectRatio:(MediaQuery.of(context).size.height * 0.0013)),
                     itemBuilder: (context, index) {
                       return Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.white,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        color: Colors.white,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Recipes(
+                                        category:
+                                            _categories[index])));
+                          },
                           child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                LayoutBuilder(builder: (context,constraint){
-                                  return Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      SizedBox(
-                                          height: 150,
-                                          width: double.infinity,
-                                          child: Image(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                                '${_categories[index].strCategoryThumb}'),
-                                          )),
-                                      Positioned(
-                                        bottom: -(constraint.maxHeight /
-                                            .2),
-                                        left: 0,
-                                        right: 0,
-                                        child: SizedBox(
-                                          child: Container(
-                                            height: 40,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(.3),
-                                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))
-                                            ),
-                                          ),
-                                        ),
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Container(
+                                      height: 150,
+                                      padding: EdgeInsets.all(5),
+                                      child: Image(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            '${_categories[index].strCategoryThumb}'),
+                                      )),
+                                  Positioned(
+                                    bottom: -8,
+                                    left: 0,
+                                    right: 0,
+                                    child: SizedBox(
+                                      child: Container(
+                                        height: 40,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black
+                                                .withOpacity(.3),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10))),
                                       ),
-                                      Positioned(
-                                        bottom: height* -.003,
-                                        left: 0,
-                                        right: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-
-                                          child: Text(
-                                            '${_categories[index].strCategory}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white,fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                }),
-
-                              ],
-                            ),
-                          );
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: -8,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        '${_categories[index].strCategory}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),maxLines: 1,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     }))
           ],
         ),
