@@ -44,6 +44,19 @@ class _RecipeDetailsState extends State<RecipeDetails> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 

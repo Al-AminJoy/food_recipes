@@ -1,5 +1,8 @@
 
+import 'package:recepie_app/data/Ingredient.dart';
 import 'package:recepie_app/data/MealDetails.dart';
+import 'package:recepie_app/data/Measure.dart';
+import 'package:recepie_app/data/Recipe.dart';
 import 'package:recepie_app/data/meal.dart';
 
 import 'data/category_model.dart';
@@ -36,7 +39,7 @@ class NetworkRepository{
   }
 
 
-  Future<void> getRecipe (String mealId)async{
+  Future<Recipe> getRecipe (String mealId)async{
     MealDetails? mealDetails;
     
     var response = await http.get(Uri.parse("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$mealId"));
@@ -45,14 +48,45 @@ class NetworkRepository{
       mealDetails = mealDetailsFromJson(response.body.toString());
     }
 
+    List<Ingredient> ingredientList = [];
+    List<Measure> measureList = [];
+    Recipe recipe = Recipe();
+
     for(Map<String, String?> meals in mealDetails!.meals){
       for(MapEntry<String,String?> data in meals.entries){
-        print(data.key);
+        if(data.key.toLowerCase().contains("ingredient".toLowerCase())){
+          if(data.value != null && data.value!.isNotEmpty){
+            ingredientList.add(Ingredient(ingredientName: data.value!));
+          }
+        }
+        if(data.key.toLowerCase().contains("measure".toLowerCase())){
+          if(data.value != null && data.value!.isNotEmpty){
+            measureList.add(Measure(measureQuantity: data.value!));
+          }
+        }
+        if(data.key.toLowerCase() == "idMeal".toLowerCase()){
+          recipe.mealId = data.value!;
+        }
+        if(data.key.toLowerCase() == "strMeal".toLowerCase()){
+          recipe.mealName = data.value!;
+        }
+        if(data.key.toLowerCase() == "strInstructions".toLowerCase()){
+          recipe.instruction = data.value!;
+        }
+        if(data.key.toLowerCase() == "strYoutube".toLowerCase()){
+          recipe.youtubeTutorial = data.value!;
+        }
       }
     }
 
-   // print(mealDetails?.toJson());
-    
+
+    recipe.ingredientList = ingredientList;
+    recipe.measureList = measureList;
+
+    print(recipe.toJson());
+
+    return recipe;
+
   }
 
 }
