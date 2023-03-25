@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:recepie_app/data/category.dart';
 import 'package:recepie_app/data/category_model.dart';
 import 'package:recepie_app/network_repository.dart';
-import 'package:recepie_app/recipes_page.dart';
+import 'package:recepie_app/views/recipes_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
