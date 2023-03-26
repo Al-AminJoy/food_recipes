@@ -41,24 +41,17 @@ class _RecipeDetailsState extends State<RecipeDetails> {
   }
 
   void _launchURL() async {
-    if (Platform.isIOS) {
-      if (await canLaunch('youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
-        await launch('youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw', forceSafariVC: false);
-      } else {
-        if (await canLaunch('https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
-          await launch('https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw');
-        } else {
-          throw 'Could not launch https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw';
-        }
-      }
+    String _youtubeTutorial = _recipe.youtubeTutorial;
+    if (await canLaunchUrl(Uri.parse(_youtubeTutorial))) {
+      await launchUrl(Uri.parse(_youtubeTutorial));
     } else {
-      const url = 'https://www.youtube.com/watch?v=29hd4Nm9dpQ&ab_channel=HalalEntertainment';
-      if (await canLaunch(url)) {
-        await launch(url);
+      if (await canLaunchUrl(Uri.parse(_youtubeTutorial))) {
+        await launchUrl(Uri.parse(_youtubeTutorial));
       } else {
-        throw 'Could not launch $url';
+        throw 'Could not launch $_youtubeTutorial';
       }
-    }}
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
