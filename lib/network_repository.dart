@@ -76,6 +76,9 @@ class NetworkRepository{
         if(data.key.toLowerCase() == "strYoutube".toLowerCase()){
           recipe.youtubeTutorial = data.value!;
         }
+        if(data.key.toLowerCase() == "strMealThumb".toLowerCase()){
+          recipe.image = data.value!;
+        }
       }
     }
 
