@@ -10,19 +10,6 @@ class Recipe{
   List<Ingredient> ingredientList = [];
   List<Measure> measureList = [];
 
-/*  Recipe({
-    required this.mealId, required this.mealName, required this.instruction, required this.image,
-    required this.youtubeTutorial, required this.ingredientList, required this.measureList
-}); */
-
-/*
-Map<String, dynamic> toJson() => {
-        "idCategory": idCategory,
-        "strCategory": strCategory,
-        "strCategoryThumb": strCategoryThumb,
-        "strCategoryDescription": strCategoryDescription,
-      };
- */
 
 
 

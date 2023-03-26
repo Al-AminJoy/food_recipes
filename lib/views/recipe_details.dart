@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:recepie_app/data/Ingredient.dart';
 import 'package:recepie_app/data/Measure.dart';
 import 'package:recepie_app/data/Recipe.dart';
 import 'package:recepie_app/data/meal_emlement.dart';
 import 'package:recepie_app/network_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecipeDetails extends StatefulWidget {
   final MealElement mealElement;
@@ -37,6 +40,26 @@ class _RecipeDetailsState extends State<RecipeDetails> {
     });
   }
 
+  void _launchURL() async {
+    if (Platform.isIOS) {
+      if (await canLaunch('youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
+        await launch('youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw', forceSafariVC: false);
+      } else {
+        if (await canLaunch('https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
+          await launch('https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw');
+        } else {
+          throw 'Could not launch https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw';
+        }
+      }
+    } else {
+      const url = 'https://www.youtube.com/watch?v=29hd4Nm9dpQ&ab_channel=HalalEntertainment';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,13 +80,36 @@ class _RecipeDetailsState extends State<RecipeDetails> {
               fit: FlexFit.tight,
               flex: 1,
               child: Container(
-                height: 150,
+              height: 150,
+              width: double.infinity,
+              padding: EdgeInsets.all(2),
               color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: (){
+                        _launchURL();
+                      },
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: const [
+                          Text('Watch on Youtube',style: TextStyle(color: Colors.white),),
+                          SizedBox(width: 10,),
+                          Icon(Icons.slow_motion_video_outlined,color: Colors.red,)
+                        ],
+                      )
+                      ,
+                    ),
+                  ],
+                )
               )),
           Flexible(
             fit: FlexFit.tight,
             flex: 2,
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
                 Container(
                   width: double.infinity,
@@ -99,7 +145,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
 
                               return Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.trip_origin,
                                     color: Colors.black,
                                     size: 5,
@@ -147,12 +193,15 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   ),
                 ),
                 Positioned(
-                    left: 190,
+                    left: 200,
                     bottom: 0,
-                    right: -190,top: -700,
+                    right: -40,
+                    top: -600,
                     child: CircleAvatar(
-                  backgroundImage: NetworkImage(_recipe.image),
-                  radius: 100,
+                  radius: 20,
+                      child:  ClipOval(
+                     child: Image.network(mealElement.strMealThumb),
+                ),
                 ))
               ],
             ),
