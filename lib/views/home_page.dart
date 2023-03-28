@@ -25,10 +25,6 @@ class _HomePageState extends State<HomePage> {
 
   void changeText(String text) {
       searchItem = text;
-      if(searchItem.isEmpty){
-        setState(() {});
-        return;
-      }
       _searchedList.clear();
       for(Category category in _categories){
         if(category.strCategory.toLowerCase().contains(searchItem.toLowerCase())){
@@ -126,26 +122,7 @@ class _HomePageState extends State<HomePage> {
               height: 10,
             ),
             Expanded(
-                child: filteredCategory(_searchedList.isEmpty || searchItem.isEmpty ? _categories : _searchedList)
-                
-                
-                /*
-                GridView.builder(
-                    itemCount: _categories.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: (orientaion == Orientation.portrait) ? 2 : 3,
-                            childAspectRatio:(MediaQuery.of(context).size.height * 0.0013)),
-                    itemBuilder: (context, index) {
-                      if(searchItem.isEmpty){
-                        return cardItem(_categories[index]);
-                      }else if(_categories[index].strCategory.toLowerCase().contains(searchItem.toLowerCase())){
-                        return Center(
-                          child: cardItem(_categories[index]),
-                        );
-                      }else{
-                        return Container();
-                      }
-                    })
-                 */
+                child: filteredCategory( searchItem.isEmpty ? _categories : _searchedList)
             )
           ],
         ),
@@ -156,15 +133,21 @@ class _HomePageState extends State<HomePage> {
 
   Widget filteredCategory(List<Category> categoryList){
 
-    print(categoryList.length);
+    if(categoryList.isEmpty){
+      return const Center(
+        child: Text("No Data Found"),
+      );
+    }else{
+      return GridView.builder(
+          itemCount: categoryList.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ,
+              childAspectRatio:(MediaQuery.of(context).size.height * 0.0013)),
+          itemBuilder: (context, index) {
+            return cardItem(categoryList[index]);
+          });
+    }
 
-    return GridView.builder(
-        itemCount: categoryList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ,
-            childAspectRatio:(MediaQuery.of(context).size.height * 0.0013)),
-        itemBuilder: (context, index) {
-          return cardItem(categoryList[index]);
-        });
+
     
   }
   
