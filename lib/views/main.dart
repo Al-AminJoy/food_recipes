@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recepie_app/views/home_page.dart';
+import 'package:recepie_app/views/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
