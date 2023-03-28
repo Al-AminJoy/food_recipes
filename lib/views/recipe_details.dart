@@ -106,6 +106,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
               children: [
                 Container(
                   width: double.infinity,
+                  height: double.infinity,
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
                       color: Colors.orange,
@@ -136,6 +137,9 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                                   _recipe.ingredientList;
                               List<Measure> _measureList = _recipe.measureList;
 
+                              print(_ingredientList);
+                              print(_measureList);
+
                               return Row(
                                 children: [
                                   const Icon(
@@ -159,7 +163,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                          ": ${_measureList[index].measureQuantity}", style:
+                                          ": ${index >= (_measureList.length-1) ? "N/A":_measureList[index].measureQuantity}", style:
                                       const TextStyle(color: Colors.white, fontSize: 16)),
                                     ),
                                   )
@@ -175,8 +179,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                         ),
                         const SizedBox(
                           height: 10,
-                        ),
-                        Text(
+                        ),Text(
                           _recipe.instruction,
                           style:
                           const TextStyle(color: Colors.white, fontSize: 16),
