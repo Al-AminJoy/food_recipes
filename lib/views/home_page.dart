@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
               height: 10,
             ),
             Expanded(
-                child: filteredCategory( searchItem.isEmpty ? _categories : _searchedList)
+                child: _categories.isEmpty ? const Center( child: CircularProgressIndicator(value: 0.3,color: Colors.orange,),) : filteredCategory( searchItem.isEmpty ? _categories : _searchedList)
             )
           ],
         ),

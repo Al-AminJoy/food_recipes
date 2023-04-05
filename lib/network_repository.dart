@@ -1,8 +1,8 @@
 
 import 'package:recepie_app/data/Ingredient.dart';
-import 'package:recepie_app/data/MealDetails.dart';
-import 'package:recepie_app/data/Measure.dart';
-import 'package:recepie_app/data/Recipe.dart';
+import 'package:recepie_app/data/meal_details.dart';
+import 'package:recepie_app/data/measure.dart';
+import 'package:recepie_app/data/recipe.dart';
 import 'package:recepie_app/data/meal.dart';
 
 import 'data/category_model.dart';

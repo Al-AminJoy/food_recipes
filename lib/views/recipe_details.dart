@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:recepie_app/data/Ingredient.dart';
-import 'package:recepie_app/data/Measure.dart';
-import 'package:recepie_app/data/Recipe.dart';
+import 'package:recepie_app/data/measure.dart';
+import 'package:recepie_app/data/recipe.dart';
 import 'package:recepie_app/data/meal_emlement.dart';
 import 'package:recepie_app/network_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,7 +67,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
+      body: _recipe.ingredientList.isEmpty ? const Center( child: CircularProgressIndicator(value: 0.3,color: Colors.orange,),) : Column(
         children: [
           Flexible(
               fit: FlexFit.tight,

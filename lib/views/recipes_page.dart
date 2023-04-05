@@ -99,7 +99,8 @@ class _RecipesState extends State<Recipes> {
               height: 10,
             ),
             Expanded(
-              child: GridView.builder(
+
+              child: _mealList.isEmpty ? const Center( child: CircularProgressIndicator(value: 0.3,color: Colors.orange,),)  :GridView.builder(
                   itemCount: _mealList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: (orientaion == Orientation.portrait)

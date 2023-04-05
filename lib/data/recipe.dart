@@ -1,5 +1,5 @@
 import 'package:recepie_app/data/Ingredient.dart';
-import 'package:recepie_app/data/Measure.dart';
+import 'package:recepie_app/data/measure.dart';
 
 class Recipe{
   String mealId= "";
